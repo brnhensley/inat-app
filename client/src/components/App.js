@@ -8,6 +8,10 @@ import Search from './Search';
 function App() {
   const [apiData, setApiData] = useState(null);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [user, setUser] = useState(null);      // remove direct ID before hosting
+  // const [coordinates, setcoordinates] = useState(null);
+  const [radius, setRadius] = useState(null);
+
   // loading flag set to false to check for loading
 
   async function callINatAPI(query) {
@@ -26,36 +30,61 @@ function App() {
   const handleSearchSubmit = (event) => {
     const lng = event.target.lng.value;
     const lat = event.target.lat.value;
-    const radius = event.target.radius.value || 80;
-    const user = event.target.user.value;
-    let query = `lat=${lat}&lng=${lng}&radius=${radius}`;
-    if (user.length > 0) query += `&unobserved_by_user_id=${user}`;
+    const rad = event.target.radius.value || 40;
+    const notUser = event.target.user.value || "1762669"; // DELETE LATER
+    let query = `lat=${lat}&lng=${lng}&radius=${rad}`;
+
+    let taxa = getTaxa(event.target.Taxa);
+    console.log(taxa);
+    if (notUser.length > 0) {
+      setUser(notUser);
+      query += `&unobserved_by_user_id=${notUser}`;
+    };
+
+    if (taxa.length > 0) query += `&iconic_taxa=${taxa}`;
+
     callINatAPI(query);
-    console.log("yup");
+    // setcoordinates([lat, lng]);
+    setRadius(rad);
+    // console.log(event.target);
     event.preventDefault();
   };
   // &iconic_taxa=Actinopterygii%2CAnimalia%2CAmphibia%2CArachnida%2CAves%2CChromista%2CFungi%2CInsecta%2CMammalia%2CMollusca%2CReptilia%2CPlantae%2CProtozoa%2Cunknown
+
+  const getTaxa = (checkboxes) => {
+    let checked = [];
+    checkboxes.forEach(box => {
+      // console.log(box);
+      if (box.checked) {
+        checked.push(box.value);
+      }
+    });
+    return checked.join("%2C");
+  };
 
   const handleSpeciesSelect = (index) => {
     console.log(index);
     setSelectedSpecies(apiData.results[index]);
     console.log(selectedSpecies);
   };
-
-  let button = <Search onSearchSubmit={handleSearchSubmit} />;
+  let userText = user ? `by user #${user} ` : null;
 
   let results = null;
   if (selectedSpecies) {
     results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
   } else if (apiData) {
-    results = <ResultsList species={apiData.results.sort((a, b) => a.count - b.count)} onSpeciesSelect={handleSpeciesSelect} />;
+    results = <>
+      Species not seen {userText}within {radius} km.
+      <ResultsList species={apiData.results.sort((a, b) => a.count - b.count)} onSpeciesSelect={handleSpeciesSelect} />
+    </>;
   }
+
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>iNat app</h1>
-        {button}
+        <Search onSearchSubmit={handleSearchSubmit} />
       </header>
       {results}
       <Footer />
