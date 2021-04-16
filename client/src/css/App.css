@@ -13,10 +13,20 @@
 .row {
   display: flex;
 }
+
 .column {
   flex: 50%
 }
 
+input#coor {
+  width: 40%;
+}
+
+.hiding {
+  display: none;
+}
+
+/* Don't work :( */
 @media screen and (max-width: 600px) {
   .column {
     width: 100%;

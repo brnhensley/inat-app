@@ -7,75 +7,109 @@ import Search from './Search';
 
 function App() {
   const [apiData, setApiData] = useState(null);
+  // const [totalResults, setTotalResults] = useState(null);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [user, setUser] = useState(null);      // remove direct ID before hosting
   // const [coordinates, setcoordinates] = useState(null);
   const [radius, setRadius] = useState(null);
+  const [months, setMonths] = useState([]);
+  const [taxa, setTaxa] = useState([]);
+  const [sort, setSort] = useState(true);
 
+  const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   // loading flag set to false to check for loading
 
   async function callINatAPI(query) {
     console.log("api call");
     const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&hrank=species&";
-    console.log(`${url}${query}`);
-    const response = await fetch(`${url}${query}`).then(x => x.json());
+    console.log(`${url}\n${query}`);
+    const response = await fetch(`${url}${query}`)
+      .then(res => {
+        if (!res.ok) throw Error(res.status);
+        else return res.json();
+      })
+      .catch(error => {
+        console.error('onRejected function called: ' + error.message);
+      });
 
-    console.log(response.total_results);
-    console.log(response);
-    setApiData(response);
+    if (response) {
+      setApiData(response.results.sort((a, b) => a.count - b.count));
+      // setTotalResults(response.total_results);
+    }
   };
 
-  // unobserved_by_user_id=1762669
-
   const handleSearchSubmit = (event) => {
-    const lng = event.target.lng.value;
-    const lat = event.target.lat.value;
+    // removes any non number, comma, periof or dash. splits at ",", ", " or " "
+    // replace may be useless if input won't allow ()
+    const coor = event.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
     const rad = event.target.radius.value || 40;
-    const notUser = event.target.user.value || "1762669"; // DELETE LATER
-    let query = `lat=${lat}&lng=${lng}&radius=${rad}`;
+    const notUser = event.target.user.value || "1762669";                               // DELETE LATER
+    let query = `lat=${coor[0]}&lng=${coor[1]}&radius=${rad}`;
 
-    let taxa = getTaxa(event.target.Taxa);
-    console.log(taxa);
     if (notUser.length > 0) {
       setUser(notUser);
       query += `&unobserved_by_user_id=${notUser}`;
     };
 
+    let taxa = getCheckboxes(event.target.taxa, setTaxa);
     if (taxa.length > 0) query += `&iconic_taxa=${taxa}`;
+
+    let months = getCheckboxes(event.target.months, setMonths);
+    console.log(months);
+    if (taxa.length > 0) query += `&month=${months}`;
 
     callINatAPI(query);
     // setcoordinates([lat, lng]);
     setRadius(rad);
-    // console.log(event.target);
+    setSort(true);
     event.preventDefault();
   };
-  // &iconic_taxa=Actinopterygii%2CAnimalia%2CAmphibia%2CArachnida%2CAves%2CChromista%2CFungi%2CInsecta%2CMammalia%2CMollusca%2CReptilia%2CPlantae%2CProtozoa%2Cunknown
 
-  const getTaxa = (checkboxes) => {
+  const getCheckboxes = (checkboxes, setState) => {
     let checked = [];
     checkboxes.forEach(box => {
-      // console.log(box);
-      if (box.checked) {
-        checked.push(box.value);
-      }
+      if (box.checked) checked.push(box.value);
     });
+    setState(checked);
     return checked.join("%2C");
   };
 
   const handleSpeciesSelect = (index) => {
     console.log(index);
-    setSelectedSpecies(apiData.results[index]);
+    setSelectedSpecies(apiData[index]);
     console.log(selectedSpecies);
   };
-  let userText = user ? `by user #${user} ` : null;
 
+  const monthPicker = () => {
+    let output = [];
+    months.forEach(month => {
+      output.push(calendar[month]);
+    });
+    return output.join(", ");
+  };
+
+  const sortData = () => {
+    if (sort) {
+      setApiData(apiData.sort((a, b) => b.count - a.count));
+    } else {
+      setApiData(apiData.sort((a, b) => a.count - b.count));
+    }
+    setSort(!sort);
+  };
+
+  let userText = user ? `by user #${user} ` : null;
   let results = null;
+  let monthString = months.length > 0 ? `During ${monthPicker()}.` : "Year round.";
+  let sortText = sort ? "most" : "least";
+
   if (selectedSpecies) {
     results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
   } else if (apiData) {
     results = <>
-      Species not seen {userText}within {radius} km.
-      <ResultsList species={apiData.results.sort((a, b) => a.count - b.count)} onSpeciesSelect={handleSpeciesSelect} />
+      Species not seen {userText}within {radius} km. {monthString}
+      <br />
+      <button onClick={() => sortData()}>Sort by {sortText} common</button>
+      <ResultsList species={apiData} onSpeciesSelect={handleSpeciesSelect} />
     </>;
   }
 
@@ -83,9 +117,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>iNat app</h1>
+        <h1>What's around here? An iNat app</h1>
         <Search onSearchSubmit={handleSearchSubmit} />
       </header>
+      <br /><br />
       {results}
       <Footer />
     </div >

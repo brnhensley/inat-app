@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import Species from './Species';
 
 export default function ResultsList(props) {
