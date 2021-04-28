@@ -6,22 +6,23 @@ import SpeciesDetail from './SpeciesDetail';
 import Search from './Search';
 
 function App() {
+  const [loading, setLoading] = useState(false);
   const [apiData, setApiData] = useState(null);
-  // const [totalResults, setTotalResults] = useState(null);
+  const [totalResults, setTotalResults] = useState(null);
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [user, setUser] = useState(null);      // remove direct ID before hosting
   // const [coordinates, setcoordinates] = useState(null);
   const [radius, setRadius] = useState(null);
   const [months, setMonths] = useState([]);
   const [taxa, setTaxa] = useState([]);
-  const [sort, setSort] = useState(true);
+  const [sortByLeastSeen, setSort] = useState(true);
 
   const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   // loading flag set to false to check for loading
 
   async function callINatAPI(query) {
     console.log("api call");
-    const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&hrank=species&";
+    const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&rank=species&";
     console.log(`${url}\n${query}`);
     const response = await fetch(`${url}${query}`)
       .then(res => {
@@ -34,16 +35,19 @@ function App() {
 
     if (response) {
       setApiData(response.results.sort((a, b) => a.count - b.count));
-      // setTotalResults(response.total_results);
+      setTotalResults(response.total_results);
     }
+    setLoading(false);
   };
 
+  // add endangered option threatened=true
   const handleSearchSubmit = (event) => {
+    setLoading(true);
     // removes any non number, comma, periof or dash. splits at ",", ", " or " "
     // replace may be useless if input won't allow ()
     const coor = event.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
-    const rad = event.target.radius.value || 40;
-    const notUser = event.target.user.value || "1762669";                               // DELETE LATER
+    const rad = event.target.radius.value || 10;
+    const notUser = event.target.user.value;// || "1762669";                               // DELETE LATER
     let query = `lat=${coor[0]}&lng=${coor[1]}&radius=${rad}`;
 
     if (notUser.length > 0) {
@@ -55,8 +59,10 @@ function App() {
     if (taxa.length > 0) query += `&iconic_taxa=${taxa}`;
 
     let months = getCheckboxes(event.target.months, setMonths);
-    console.log(months);
-    if (taxa.length > 0) query += `&month=${months}`;
+    if (months.length > 0) query += `&month=${months}`;
+
+    let threatened = event.target.threatened.checked;
+    if (threatened) query += "&threatened=true";
 
     callINatAPI(query);
     // setcoordinates([lat, lng]);
@@ -89,24 +95,28 @@ function App() {
   };
 
   const sortData = () => {
-    if (sort) {
+    if (sortByLeastSeen) {
       setApiData(apiData.sort((a, b) => b.count - a.count));
     } else {
       setApiData(apiData.sort((a, b) => a.count - b.count));
     }
-    setSort(!sort);
+    setSort(!sortByLeastSeen);
   };
 
-  let userText = user ? `by user #${user} ` : null;
+  let userText = user ? `not seen by user ${user} ` : "seen";
   let results = null;
   let monthString = months.length > 0 ? `During ${monthPicker()}.` : "Year round.";
-  let sortText = sort ? "most" : "least";
+  let sortText = sortByLeastSeen ? "most" : "least";
 
-  if (selectedSpecies) {
-    results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
+  //if (selectedSpecies) {
+  //   results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
+  // }
+
+  if (loading) {
+    results = "Searching for species...";
   } else if (apiData) {
     results = <>
-      Species not seen {userText}within {radius} km. {monthString}
+      {totalResults} species {userText} within {radius} km. {monthString}
       <br />
       <button onClick={() => sortData()}>Sort by {sortText} common</button>
       <ResultsList species={apiData} onSpeciesSelect={handleSpeciesSelect} />

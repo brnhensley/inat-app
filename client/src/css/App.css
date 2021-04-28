@@ -1,6 +1,7 @@
 .App {
   background-color: #282c34;
   min-height: 100vh;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,6 +9,10 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+#footer {
+  min-height: 30px;
 }
 
 .row {
@@ -26,9 +31,23 @@ input#coor {
   display: none;
 }
 
+legend {
+  align: center;
+}
+
+ol {
+  padding: 0;
+    margin-left: 1em;
+  word-wrap: break-word;
+}
+
+/* li {
+  background-color: red;
+} */
+
 /* Don't work :( */
-@media screen and (max-width: 600px) {
-  .column {
-    width: 100%;
+@media screen and (max-width: 500px) {
+  img {
+    width: 90%;
   }
 }
