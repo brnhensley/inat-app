@@ -3,7 +3,7 @@ import { useState } from 'react';
 export default function TaxonSelect() {
     const [expanded, setExpanded] = useState(false);
     let classes = ["column", expanded ? "showing" : "hiding"];
-
+    // filter by results[index].taxon.iconic_taxon_name
     return (
         <div>
             <fieldset className="row">
