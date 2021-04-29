@@ -1,9 +1,9 @@
 import '../css/App.css';
 import { useState } from 'react';
-import ResultsList from './ResultsList';
+import ResultsList from './results/ResultsList';
 import Footer from './Footer';
-import SpeciesDetail from './SpeciesDetail';
-import Search from './Search';
+import SpeciesDetail from './results/SpeciesDetail';
+import Search from './search/Search';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -16,14 +16,15 @@ function App() {
   const [months, setMonths] = useState([]);
   const [taxa, setTaxa] = useState([]);
   const [sortByLeastSeen, setSort] = useState(true);
+  const [error, setError] = useState(null);
 
   const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   // loading flag set to false to check for loading
 
   async function callINatAPI(query) {
-    console.log("api call");
     const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&rank=species&";
     console.log(`${url}\n${query}`);
+
     const response = await fetch(`${url}${query}`)
       .then(res => {
         if (!res.ok) throw Error(res.status);
@@ -31,44 +32,48 @@ function App() {
       })
       .catch(error => {
         console.error('onRejected function called: ' + error.message);
+        setError(error.message);
       });
 
     if (response) {
       setApiData(response.results.sort((a, b) => a.count - b.count));
       setTotalResults(response.total_results);
     }
+
     setLoading(false);
   };
 
   // add endangered option threatened=true
-  const handleSearchSubmit = (event) => {
+  const handleSearchSubmit = (e) => {
+    setError(null);
     setLoading(true);
-    // removes any non number, comma, periof or dash. splits at ",", ", " or " "
-    // replace may be useless if input won't allow ()
-    const coor = event.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
-    const rad = event.target.radius.value || 10;
-    const notUser = event.target.user.value;// || "1762669";                               // DELETE LATER
+    // removes any non number, comma, period or dash. splits at "," ", " or " "
+    const coor = e.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
+    const rad = e.target.radius.value || 10;
+    const notUser = e.target.user.value;
     let query = `lat=${coor[0]}&lng=${coor[1]}&radius=${rad}`;
 
     if (notUser.length > 0) {
       setUser(notUser);
       query += `&unobserved_by_user_id=${notUser}`;
+    } else {
+      setUser(null);
     };
 
-    let taxa = getCheckboxes(event.target.taxa, setTaxa);
+    let taxa = getCheckboxes(e.target.taxa, setTaxa);
     if (taxa.length > 0) query += `&iconic_taxa=${taxa}`;
 
-    let months = getCheckboxes(event.target.months, setMonths);
+    let months = getCheckboxes(e.target.months, setMonths);
     if (months.length > 0) query += `&month=${months}`;
 
-    let threatened = event.target.threatened.checked;
+    let threatened = e.target.threatened.checked;
     if (threatened) query += "&threatened=true";
 
     callINatAPI(query);
     // setcoordinates([lat, lng]);
     setRadius(rad);
     setSort(true);
-    event.preventDefault();
+    e.preventDefault();
   };
 
   const getCheckboxes = (checkboxes, setState) => {
@@ -112,7 +117,10 @@ function App() {
   //   results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
   // }
 
-  if (loading) {
+  // render errors, loading message or search results
+  if (error) {
+    results = (error === "422") ? `User ${user} not found, search is case sensative.` : `Error ${error}.`;
+  } else if (loading) {
     results = "Searching for species...";
   } else if (apiData) {
     results = <>
