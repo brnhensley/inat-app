@@ -38,6 +38,8 @@ function App() {
     if (response) {
       setApiData(response.results.sort((a, b) => a.count - b.count));
       setTotalResults(response.total_results);
+    } else {
+      setApiData(null);
     }
 
     setLoading(false);
@@ -86,9 +88,7 @@ function App() {
   };
 
   const handleSpeciesSelect = (index) => {
-    console.log(index);
     setSelectedSpecies(apiData[index]);
-    console.log(selectedSpecies);
   };
 
   const monthPicker = () => {
@@ -110,7 +110,7 @@ function App() {
 
   let userText = user ? `not seen by user ${user} ` : "seen";
   let results = null;
-  let monthString = months.length > 0 ? `During ${monthPicker()}.` : "Year round.";
+  let monthString = months.length > 0 ? `during ${monthPicker()}` : "year round";
   let sortText = sortByLeastSeen ? "most" : "least";
 
   //if (selectedSpecies) {
@@ -119,18 +119,17 @@ function App() {
 
   // render errors, loading message or search results
   if (error) {
-    results = (error === "422") ? `User ${user} not found, search is case sensative.` : `Error ${error}.`;
+    results = (error === "422") ? `User ${user} not found, user names are case sensative.` : `Error ${error}.`;
   } else if (loading) {
     results = "Searching for species...";
   } else if (apiData) {
     results = <>
-      {totalResults} species {userText} within {radius} km. {monthString}
+      {totalResults} species {userText} within {radius} km, {monthString}.
       <br />
       <button onClick={() => sortData()}>Sort by {sortText} common</button>
       <ResultsList species={apiData} onSpeciesSelect={handleSpeciesSelect} />
     </>;
   }
-
 
   return (
     <div className="App">
