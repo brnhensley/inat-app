@@ -2,15 +2,15 @@ import '../css/App.css';
 import { useState } from 'react';
 import ResultsList from './results/ResultsList';
 import Footer from './Footer';
-import SpeciesDetail from './results/SpeciesDetail';
 import Search from './search/Search';
+// import SpeciesDetail from './results/SpeciesDetail';
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [apiData, setApiData] = useState(null);
   const [totalResults, setTotalResults] = useState(null);
-  const [selectedSpecies, setSelectedSpecies] = useState(null);
-  const [user, setUser] = useState(null);      // remove direct ID before hosting
+  // const [selectedSpecies, setSelectedSpecies] = useState(null);
+  const [user, setUser] = useState(null);
   // const [coordinates, setcoordinates] = useState(null);
   const [radius, setRadius] = useState(null);
   const [months, setMonths] = useState([]);
@@ -18,8 +18,6 @@ function App() {
   const [sortByLeastSeen, setSort] = useState(true);
   const [error, setError] = useState(null);
 
-  const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  // loading flag set to false to check for loading
 
   async function callINatAPI(query) {
     const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&rank=species&";
@@ -45,10 +43,10 @@ function App() {
     setLoading(false);
   };
 
-  // add endangered option threatened=true
   const handleSearchSubmit = (e) => {
     setError(null);
     setLoading(true);
+
     // removes any non number, comma, period or dash. splits at "," ", " or " "
     const coor = e.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
     const rad = e.target.radius.value || 10;
@@ -62,8 +60,8 @@ function App() {
       setUser(null);
     };
 
-    let taxa = getCheckboxes(e.target.taxa, setTaxa);
-    if (taxa.length > 0) query += `&iconic_taxa=${taxa}`;
+    let taxon = getCheckboxes(e.target.taxa, setTaxa);
+    if (taxon.length > 0) query += `&iconic_taxa=${taxon}`;
 
     let months = getCheckboxes(e.target.months, setMonths);
     if (months.length > 0) query += `&month=${months}`;
@@ -88,10 +86,11 @@ function App() {
   };
 
   const handleSpeciesSelect = (index) => {
-    setSelectedSpecies(apiData[index]);
+    // setSelectedSpecies(apiData[index]);
   };
 
   const monthPicker = () => {
+    const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let output = [];
     months.forEach(month => {
       output.push(calendar[month]);
@@ -108,14 +107,15 @@ function App() {
     setSort(!sortByLeastSeen);
   };
 
+  //if (selectedSpecies) {
+  //   results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
+  // }
+
   let userText = user ? `not seen by user ${user} ` : "seen";
   let results = null;
   let monthString = months.length > 0 ? `during ${monthPicker()}` : "year round";
   let sortText = sortByLeastSeen ? "most" : "least";
-
-  //if (selectedSpecies) {
-  //   results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
-  // }
+  let taxaText = taxa.length > 0 ? `${taxa.join(", ").toLowerCase()}` : "all taxa";
 
   // render errors, loading message or search results
   if (error) {
@@ -124,7 +124,7 @@ function App() {
     results = "Searching for species...";
   } else if (apiData) {
     results = <>
-      {totalResults} species {userText} within {radius} km, {monthString}.
+      {totalResults} species from {taxaText} {userText} within {radius} km, {monthString}.
       <br />
       <button onClick={() => sortData()}>Sort by {sortText} common</button>
       <ResultsList species={apiData} onSpeciesSelect={handleSpeciesSelect} />

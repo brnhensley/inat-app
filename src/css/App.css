@@ -36,10 +36,6 @@ ol {
   word-wrap: break-word;
 }
 
-/* li {
-  background-color: red;
-} */
-
 /* Don't work :( */
 @media screen and (max-width: 500px) {
   img {

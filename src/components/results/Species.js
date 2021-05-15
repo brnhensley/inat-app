@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export default function Species(props) {
     const { taxon, count, } = props.specie;
-    const { index, onSpeciesSelect } = props;
+    const { index } = props;
 
     const img = taxon.default_photo ?
         <img alt={taxon.default_photo.attribution} src={taxon.default_photo.medium_url} /> :
