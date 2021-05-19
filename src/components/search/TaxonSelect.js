@@ -7,7 +7,7 @@ export default function TaxonSelect() {
     return (
         <fieldset className="row">
             <legend onClick={() => setExpanded(!expanded)}>
-                Click to search by taxon, by default all taxon are included
+                Search by taxon, by default all taxon are included
             </legend>
             <div className={classes.join(" ")}>
                 <div>

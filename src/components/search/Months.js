@@ -7,7 +7,7 @@ export default function Months() {
     return (
         <fieldset className="row">
             <legend onClick={() => setExpanded(!expanded)}>
-                Click to search by time of year, by default it searches year round
+                Search by time of year, by default it searches year round
             </legend>
             <div className={classes.join(" ")}>
                 <div>
