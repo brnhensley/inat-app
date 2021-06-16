@@ -11,7 +11,7 @@ export default function Search(props) {
             {/* value="45.99347579633895, -121.85747631016253" /> */}
             <br />
             <label htmlFor="radius">Distance from coordinates in KM</label>
-            <input id="radius" name="radius" type="number" />
+            <input id="radius" placeholder="10" name="radius" type="number" />
             <br />
             <label htmlFor="user">Unseen by this user ID or name (Optional)</label>
             <input id="user" name="user" type="double" />

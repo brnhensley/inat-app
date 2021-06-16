@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ResultsList from './results/ResultsList';
 import Footer from './Footer';
 import Search from './search/Search';
+import Help from './help/Help';
 // import SpeciesDetail from './results/SpeciesDetail';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
     setError(null);
     setLoading(true);
 
+    // TODO handle GPS copied from compass app in seconds format
     // removes any non number, comma, period or dash. splits at "," ", " or " "
     const coor = e.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
     const rad = e.target.radius.value || 10;
@@ -134,13 +136,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>What's around here? An iNat app</h1>
+        <h1>What's around here? An iNat app{ }</h1>
+        <Help />
         <Search onSearchSubmit={handleSearchSubmit} />
       </header>
       <br /><br />
       {results}
       <Footer />
-    </div >
+    </div>
   );
 }
 

@@ -12,6 +12,7 @@
 
 #footer {
   min-height: 30px;
+  font-size: calc(5px + 2vmin);
 }
 
 .row {
@@ -32,13 +33,14 @@ input#coor {
 
 ol {
   padding: 0;
-    margin-left: 1em;
+  margin-left: 1em;
   word-wrap: break-word;
 }
 
-/* Don't work :( */
-@media screen and (max-width: 500px) {
-  img {
-    width: 90%;
-  }
+a:link {
+  color:cornflowerblue;
+}
+
+a:visited {
+  color:darkslategray
 }

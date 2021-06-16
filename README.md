@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# _What's Around Here?_
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### _This is a webapp that pulls a list of species found in a given area from wildlife sightings posted on the website [iNaturalist.com](www.inaturalist.com)._
 
-## Available Scripts
+#### By _**Brian Hensley**_
 
-In the project directory, you can run:
+## Description
 
-### `npm start`
+iNaturalist is a social network for people to post images and sounds of wildlife to get identifications from the community. This is a React app that calls to the iNaturalist API to help users discover what species have been seen in a specific area.  The user enters GPS coordinates, a distance in km (_x_) and several optional filters and is shown a list of species (of any biological kingdom: plants, animals, fungi, protozoa, etc) seen within _x_ km from the givin coordinates. The idea was to make a naturalist version of a scavenger hunt, so by default the user is shown the least common species seen in the area, this sort can be reversed.
 
-Runs the app in the development mode.
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Setup/Installation Requirements
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+* The app is hosted on firebase at [inat-app.firebaseapp.com](https://inat-app.firebaseapp.com/)
+    
+    Or
 
-### `npm test`
+* clone with the command `git clone https://github.com/brnhensley/inat-app.git`
+* from the root folder run the command `npm run start`
+* open [localhost:3000](http://localhost:3000/) in your browser
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Using The App
 
-### `npm run build`
+* The app requires GPS coordinates in decimal format, the easiest way to get them is:
+    * **Browser** go to [Google Maps](https://www.google.com/maps) and right click on the map the location you want to search. The coordinates will be shown, click them to copy to clipboard.
+    * **Mobile** using the Google Maps app tap to drop a pin on the map the location you want to search. Tap the pin and swipe up until you see the GPS coordinates, tap them to copy to clipboard.
+* Paste the coordinates into the input field.
+* Enter a radius distance from those coordinates to search in kilometers. If left blank the default is 10 km.
+* You can enter an iNaturalist user id or user name (case sensative). If a name is entered the search will only show results that the user has never observed on their iNaturalist account.
+* The _Threatened only_ option will only get species that are theatened either locally or globally.
+* The taxon filter will narrow the search results by whichever biological taxons are selected. By defualt all taxon are included.
+* The time of year filter will filter the results by sightings of species during the selected months of the year. By defualt all year round is included.
+* Search results are listed from rarest to most common, this can be reversed with the button at the top of the results.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Technologies Used
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Node.js
+* Node Project Manager
+* React
+* Firebase
+* iNaturalist API
+* JavaScript
+* HTML
+* CSS
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Known Issues
 
-### `npm run eject`
+* When there are more than 500 search results the iNat API only returns the first 500. The way the API orders those results is unclear so rare species may be left out. In the case that you get more than 500 results it's a helpful to narrow the search radius parameter.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* The API's user name search is case sensative.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## License
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+GPL, keep information free. © Brian Hensley 2021. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Contact Information
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+brnhensley@gmail.com
