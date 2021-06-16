@@ -136,7 +136,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>What's around here? An iNat app{ }</h1>
+        <h1>What's around here? An iNat app</h1>
         <Help />
         <Search onSearchSubmit={handleSearchSubmit} />
       </header>
