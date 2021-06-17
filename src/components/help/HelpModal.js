@@ -24,9 +24,9 @@ export default function HelpModal(props) {
         <div className="container" ref={modalRef} onClick={close}>
             <div className="modal">
                 <button onClick={() => props.closeModal(false)}>X</button>
-                <p>iNaturalist is a social network for people to post images and sounds of wildlife to get identifications from the community. This app uses the iNaturalist API to help users discover what species have been seen in a given area.  Enter GPS coordinates in decimal form, it's easiest to get those from <a target="_blank" rel="noreferrer" href="https://www.google.com/maps/">Google maps</a>. See the <a target="_blank" rel="noreferrer" href="https://github.com/brnhensley/inat-app#readme">README</a> for more info.</p>
+                <p>This is an app that pulls a list of species found in a given area from wildlife sightings posted on the website <a target="_blank" rel="noreferrer" href="https://www.inaturalist.org/">iNaturalist</a>. Enter GPS coordinates in decimal form, it's easiest to get those from right-clicking on <a target="_blank" rel="noreferrer" href="https://www.google.com/maps/">Google maps</a>. Results are ordered by the least observed to most observed. See the <a target="_blank" rel="noreferrer" href="https://github.com/brnhensley/inat-app#readme">README</a> for more info.</p>
             </div>
-        </div>,
+        </div >,
         document.getElementById("overlay")
     );
 };

@@ -21,12 +21,12 @@ iNaturalist is a social network for people to post images and sounds of wildlife
 ## Using The App
 
 * The app requires GPS coordinates in decimal format, the easiest way to get them is:
-    * **Browser** go to [Google Maps](https://www.google.com/maps) and right click on the map the location you want to search. The coordinates will be shown, click them to copy to clipboard.
-    * **Mobile** using the Google Maps app tap to drop a pin on the map the location you want to search. Tap the pin and swipe up until you see the GPS coordinates, tap them to copy to clipboard.
+    * **Browser**: go to [Google Maps](https://www.google.com/maps) and right click on the map the location you want to search. The coordinates will be shown, click them to copy to clipboard.
+    * **Mobile**: using the Google Maps app tap to drop a pin on the map the location you want to search. Tap the pin and swipe up until you see the GPS coordinates, tap them to copy to clipboard.
 * Paste the coordinates into the input field.
-* Enter a radius distance from those coordinates to search in kilometers. If left blank the default is 10 km.
+* Enter a radius distance, in kilometers, from those coordinates to search. If left blank the default is 10 km.
 * You can enter an iNaturalist user id or user name (case sensative). If a name is entered the search will only show results that the user has never observed on their iNaturalist account.
-* The _Threatened only_ option will only get species that are theatened either locally or globally.
+* The _Threatened only_ option will only show species that are theatened, either locally or globally.
 * The taxon filter will narrow the search results by whichever biological taxons are selected. By defualt all taxon are included.
 * The time of year filter will filter the results by sightings of species during the selected months of the year. By defualt all year round is included.
 * Search results are listed from rarest to most common, this can be reversed with the button at the top of the results.
@@ -44,7 +44,7 @@ iNaturalist is a social network for people to post images and sounds of wildlife
 
 ## Known Issues
 
-* When there are more than 500 search results the iNat API only returns the first 500. The way the API orders those results is unclear so rare species may be left out. In the case that you get more than 500 results it's a helpful to narrow the search radius parameter.
+* When there are more than 500 search results the iNat API only returns the first 500. The way the API orders those results is unclear so rare species may be left out. In the case that you get more than 500 results it's a helpful to narrow the search parameters.
 
 * The API's user name search is case sensative.
 
