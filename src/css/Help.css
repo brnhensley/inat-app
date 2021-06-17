@@ -4,69 +4,73 @@ https://javascript.plainenglish.io/how-to-create-a-popup-modal-in-react-39315907
 */
 
 svg {
-    height: calc(10px + 2vmin);
-    width: calc(10px + 2vmin);
+  height: calc(10px + 2vmin);
+  width: calc(10px + 2vmin);
 }  
 
-/* modal */
+/* overlay when modal triggered */
 #overlay .container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(10, 10, 10, 0.8);
-  }
-  
-  .container .modal {
-    z-index: 1;
-    max-width: 40%;
-    max-height: 80%;
-    background: #282c34;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    border-radius: 5px;
-    border: 5px solid;
-    padding: 5px;
-    margin: 5px;
-    animation: animate 0.3s;
-    font-size: calc(7px + 2vmin);
-  }
-  
-  .container a:link {
-      color:cornflowerblue;
-  }
-
-  .container a:visited {
-    color:darkslategray
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 10, 0.8);
 }
 
-  .modal button {
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    padding: 5px 11px;
-    background: crimson;
-    color: black;
-    font-weight: bold;
-    border: none;
-    outline: none;
-    border-radius: 2px;
-    cursor: pointer;
-  }
+.modal {
+  z-index: 1;
+  max-height: 80%;
+  background: #282c34;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 5px;
+  border: 5px solid;
+  padding: 5px;
+  margin: 5px;
+  animation: animate 0.3s;
+  font-size: calc(7px + 2vmin);
+}
+
+@media screen and (min-width: 1000px) {
+  .modal {
+    max-width: 40%;
+  }   
+}
+
+@media screen and (max-width: 999px) {
+  .modal {
+    max-width: 80%;
+  }   
+}
+
+/* close button */
+.modal button {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 11px;
+  background: crimson;
+  color: black;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
   
-  @keyframes animate {
-    from {
-      transform: scale(0.5);
-    }
-    to {
-      transform: scale(1);
-    }
+@keyframes animate {
+  from {
+    transform: scale(0.5);
   }
+  to {
+    transform: scale(1);
+  }
+}

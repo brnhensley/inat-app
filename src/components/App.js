@@ -22,7 +22,6 @@ function App() {
 
     async function callINatAPI(query) {
         const url = "https://api.inaturalist.org/v1/observations/species_counts?verifiable=true&rank=species&";
-        console.log(`${url}\n${query}`);
 
         const response = await fetch(`${url}${query}`)
             .then(res => {

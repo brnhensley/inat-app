@@ -11,12 +11,7 @@ export default function HelpModal(props) {
 
     const close = (e) => {
         if (e.target === modalRef.current) {
-            console.log("TURE");
             props.closeModal(false);
-        } else {
-            console.log('FASLE');
-            console.log(e.target);
-            console.log(modalRef.current);
         }
     };
 
