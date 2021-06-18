@@ -13,7 +13,7 @@ export default function Species(props) {
         null;
 
     return (
-        <div>
+        <div className="species">
             {index + 1} - {taxon.preferred_common_name} (<i>{taxon.name}</i>) - seen {count} time(s)
             {conStatus}
             <br />

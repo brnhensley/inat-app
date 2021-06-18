@@ -1,4 +1,3 @@
-// ADD INFO MODAL/POPUP TO EXPLAIN WHAT THE APP DOES
 import '../../css/Help.css';
 import { useState } from 'react';
 import QuestionMark from './QuestionMark';

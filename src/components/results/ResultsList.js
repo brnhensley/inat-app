@@ -3,7 +3,7 @@ import Species from './Species';
 
 export default function ResultsList(props) {
     return (
-        <>
+        <div id="resultsList">
             {props.species.map((s, i) => {
                 return (
                     <Species
@@ -14,7 +14,7 @@ export default function ResultsList(props) {
                     />
                 );
             })}
-        </>
+        </div>
     );
 
 }

@@ -6,7 +6,7 @@ import Search from './search/Search';
 import Help from './help/Help';
 // import SpeciesDetail from './results/SpeciesDetail';
 
-function App() {
+export default function App() {
     const [loading, setLoading] = useState(false);
     const [apiData, setApiData] = useState(null);
     const [totalResults, setTotalResults] = useState(null);
@@ -47,9 +47,7 @@ function App() {
         setError(null);
         setLoading(true);
 
-        // TODO handle GPS copied from compass app in seconds format
-        // removes any non number, comma, period or dash. splits at "," ", " or " "
-        const coor = e.target.coor.value.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
+        const coor = coorHelper(e.target.coor.value);
         const rad = e.target.radius.value || 10;
         const notUser = e.target.user.value;
         let query = `lat=${coor[0]}&lng=${coor[1]}&radius=${rad}`;
@@ -75,6 +73,27 @@ function App() {
         setRadius(rad);
         setSort(true);
         e.preventDefault();
+    };
+
+    // returns an array of the two coordinates
+    const coorHelper = (coords) => {
+        coords = coords.toLowerCase();
+        // convert from degrees to decimal : decimal = degrees + (min/60) + (sec/3600)
+        if (coords.includes("n") || coords.includes("s")) {
+            // splits at ° ′ ' and anything from a " or ″ through a N,S,E,W, case insensative
+            const regex = /°|′|'|["|″].*?[s|n|w|e]/;
+            let x = coords.split(regex);
+            x = x.map(Number);
+            // convert to array of decimal
+            let results = [x[0] + (x[1] / 60) + (x[2] / 3600), x[3] + (x[4] / 60) + (x[5] / 3600)];
+            // S or W coords need to become negative numbers
+            if (coords.includes("S")) results[0] = results[0] * -1;
+            if (coords.includes("W")) results[1] = results[1] * -1;
+            return results;
+        } else {
+            // removes any non number, comma, period or dash. splits at "," ", " or " "
+            return coords.replace(/[^0-9\-., ]/g, "").split(/, | |,/);
+        }
     };
 
     const getCheckboxes = (checkboxes, setState) => {
@@ -145,5 +164,3 @@ function App() {
         </div>
     );
 }
-
-export default App;
