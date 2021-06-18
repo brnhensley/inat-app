@@ -1,6 +1,6 @@
 # _What's Around Here?_
 
-#### _This is a webapp that pulls a list of species found in a given area from wildlife sightings posted on the website [iNaturalist.com](https://www.inaturalist.org)._
+#### _This is a webapp that pulls a list of species found in a given area from wildlife sightings posted on the website [iNaturalist.org](https://www.inaturalist.org)._
 
 #### By _**Brian Hensley**_
 
