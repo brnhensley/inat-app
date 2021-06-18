@@ -87,8 +87,8 @@ export default function App() {
             // convert to array of decimal
             let results = [x[0] + (x[1] / 60) + (x[2] / 3600), x[3] + (x[4] / 60) + (x[5] / 3600)];
             // S or W coords need to become negative numbers
-            if (coords.includes("S")) results[0] = results[0] * -1;
-            if (coords.includes("W")) results[1] = results[1] * -1;
+            if (coords.includes("s")) results[0] = results[0] * -1;
+            if (coords.includes("w")) results[1] = results[1] * -1;
             return results;
         } else {
             // removes any non number, comma, period or dash. splits at "," ", " or " "
