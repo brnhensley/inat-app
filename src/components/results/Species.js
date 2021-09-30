@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 export default function Species(props) {
-    const { taxon, count, } = props.specie;
+    const { taxon, count, } = props.species;
     const { index } = props;
 
     const img = taxon.default_photo ?
@@ -27,7 +27,6 @@ export default function Species(props) {
 }
 
 Species.propTypes = {
-    specie: PropTypes.object.isRequired,
-    onSpeciesSelect: PropTypes.func.isRequired,
+    species: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired
 };

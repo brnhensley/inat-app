@@ -4,13 +4,12 @@ import Species from './Species';
 export default function ResultsList(props) {
     return (
         <div id="resultsList">
-            {props.species.map((s, i) => {
+            {props.speciesList.map((s, i) => {
                 return (
                     <Species
                         key={s.taxon.id}
-                        specie={s}
+                        species={s}
                         index={i}
-                        onSpeciesSelect={props.onSpeciesSelect}
                     />
                 );
             })}
@@ -20,6 +19,5 @@ export default function ResultsList(props) {
 }
 
 ResultsList.propTypes = {
-    species: PropTypes.array.isRequired,
-    onSpeciesSelect: PropTypes.func.isRequired,
+    speciesList: PropTypes.array.isRequired,
 };

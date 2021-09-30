@@ -1,18 +1,15 @@
 import '../css/App.css';
 import { useState } from 'react';
-import ResultsList from './results/ResultsList';
+import Results from './results/Results';
 import Footer from './Footer';
 import Search from './search/Search';
 import Help from './help/Help';
-// import SpeciesDetail from './results/SpeciesDetail';
 
 export default function App() {
     const [loading, setLoading] = useState(false);
     const [apiData, setApiData] = useState(null);
     const [totalResults, setTotalResults] = useState(null);
-    // const [selectedSpecies, setSelectedSpecies] = useState(null);
     const [user, setUser] = useState(null);
-    // const [coordinates, setcoordinates] = useState(null);
     const [radius, setRadius] = useState(null);
     const [months, setMonths] = useState([]);
     const [taxa, setTaxa] = useState([]);
@@ -69,7 +66,6 @@ export default function App() {
         if (threatened) query += "&threatened=true";
 
         callINatAPI(query);
-        // setcoordinates([lat, lng]);
         setRadius(rad);
         setSort(true);
         e.preventDefault();
@@ -97,59 +93,13 @@ export default function App() {
     };
 
     const getCheckboxes = (checkboxes, setState) => {
-        let checked = [];
+        const checked = [];
         checkboxes.forEach(box => {
             if (box.checked) checked.push(box.value);
         });
         setState(checked);
         return checked.join("%2C");
     };
-
-    const handleSpeciesSelect = (index) => {
-        // setSelectedSpecies(apiData[index]);
-    };
-
-    const monthPicker = () => {
-        const calendar = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        let output = [];
-        months.forEach(month => {
-            output.push(calendar[month]);
-        });
-        return output.join(", ");
-    };
-
-    const sortData = () => {
-        if (sortByLeastSeen) {
-            setApiData(apiData.sort((a, b) => b.count - a.count));
-        } else {
-            setApiData(apiData.sort((a, b) => a.count - b.count));
-        }
-        setSort(!sortByLeastSeen);
-    };
-
-    //if (selectedSpecies) {
-    //   results = <SpeciesDetail specie={selectedSpecies} onSpeciesSelect={handleSpeciesSelect} />;
-    // }
-
-    let userText = user ? `not seen by user ${user} ` : "seen";
-    let results = null;
-    let monthString = months.length > 0 ? `during ${monthPicker()}` : "year round";
-    let sortText = sortByLeastSeen ? "most" : "least";
-    let taxaText = taxa.length > 0 ? `${taxa.join(", ").toLowerCase()}` : "all taxa";
-
-    // render errors, loading message or search results
-    if (error) {
-        results = (error === "422") ? `User ${user} not found, user names are case sensative.` : `Error ${error}.`;
-    } else if (loading) {
-        results = "Searching for species...";
-    } else if (apiData) {
-        results = <>
-            {totalResults} species from {taxaText} {userText} within {radius} km, {monthString}.
-            <br />
-            <button onClick={() => sortData()}>Sort by {sortText} common</button>
-            <ResultsList species={apiData} onSpeciesSelect={handleSpeciesSelect} />
-        </>;
-    }
 
     return (
         <div className="App">
@@ -159,7 +109,19 @@ export default function App() {
                 <Search onSearchSubmit={handleSearchSubmit} />
             </header>
             <br /><br />
-            {results}
+            <Results
+                onSetApiData={setApiData}
+                speciesList={apiData}
+                totalResults={totalResults}
+                taxa={taxa}
+                radius={radius}
+                months={months}
+                sortByLeastSeen={sortByLeastSeen}
+                error={error}
+                user={user}
+                loading={loading}
+                onSetSort={setSort}
+            />
             <Footer />
         </div>
     );
